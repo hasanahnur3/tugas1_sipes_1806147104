@@ -1,0 +1,58 @@
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title> Daftar Pesawat </title>
+
+    <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
+</head>
+
+<body>
+    <object th:include="fragments/fragment :: navbar"></object>
+    <br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>No Seri</th>
+                <th>Jenis Pesawat</th>
+                <th>Nama Tipe</th>
+                <th>Maskapai</th>
+                <th>Tempat Dibuat</th>
+                <th>Tanggal Dibuat</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td th:text="${pesawat.id}"></td>
+                <td th:text="${pesawat.nomor_seri}"></td>
+                <td th:text="${pesawat.jenis_pesawat}"></td>
+                <td th:text="${namatipe}"></td>
+                <td th:text="${pesawat.maskapai}"></td>
+                <td th:text="${pesawat.tempat_dibuat}"></td>
+                <td th:text="${pesawat.tanggal_dibuat}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nama</th>
+                    <th>No Telp</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="teknisi, iterationStatus: ${listTeknisi}">
+                    <td th:text="${teknisi.id}"></td>
+                    <td th:text="${teknisi.nama}"></td>
+                    <td th:text="${teknisi.nomor_telepon}"></td>
+                </tr>
+            </tbody>        
+    </table>
+</body>
+</html>

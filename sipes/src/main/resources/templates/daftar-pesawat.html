@@ -1,0 +1,51 @@
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title> Daftar Pesawat </title>
+
+    <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
+</head>
+
+<body>
+    <object th:include="fragments/fragment :: navbar"></object>
+    <br>
+
+    <a class="btn btn-primary" th:href="@{/pesawat/add}">Add Pesawat</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>No Seri</th>
+                <th>Jenis Pesawat</th>
+                <th>Maskapai</th>
+                <th></th>
+                <th>Aksi</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="pesawat, iterationStatus: ${listPesawat}">
+                <!-- <td th:text="${iterationStatus.count}"></td> -->
+                <td th:text="${pesawat.id}"></td>
+                <td th:text="${pesawat.nomor_seri}"></td>
+                <td th:text="${pesawat.jenis_pesawat}"></td>
+                <td th:text="${pesawat.maskapai}"></td>
+                
+                <!-- <td th:text="${pesawat.tanggal_dibuat}"></td>
+                <td th:text="${pesawat.tempat_dibuat}"></td>
+                <td th:text="${pesawat.id_tipe}"></td> -->
+        
+                <td><a class="btn btn-primary" >Lihat</a></td>
+                <td><a class="btn btn-primary" >Ubah</a></td>
+                <td><a class="btn btn-primary" >Hapus</a></td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+</body>
+</html>

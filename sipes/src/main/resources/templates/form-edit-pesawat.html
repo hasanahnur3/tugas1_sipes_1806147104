@@ -1,0 +1,45 @@
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title> Daftar Pesawat </title>
+
+    <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
+</head>
+
+<body>
+    <object th:include="fragments/fragment :: navbar"></object>
+    <br>
+
+    <div class="card m-5 p-3">
+        <form th:action="@{/pesawat/edit}" th:object="${pesawat}" method="POST">
+            <input class="form-control" type="hidden" th:field="*{id}"/>
+            
+            Maskapai : <br>
+            <input class="form-control" type="text" th:field="*{maskapai}"/>
+            <br><br>
+    
+            Tanggal Dibuat : <br>
+            <input type="date" th:field="*{tanggal_dibuat}" class="form-control"/>
+            <br><br>
+    
+            Tempat Dibuat : <br>
+            <input class="form-control" type="text" th:field="*{tempat_dibuat}"/>
+            <br><br>
+    
+            Jenis Pesawat : <br>
+            <select th:field="*{jenis_pesawat}" class="form-control">
+                <option value="Komersial">Komersial</option>
+                <option value="Militer">Militer</option>
+            </select>
+            <br><br>
+            
+            <br><br>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+
+    </div>
+
+    
+</body>
+</html>
