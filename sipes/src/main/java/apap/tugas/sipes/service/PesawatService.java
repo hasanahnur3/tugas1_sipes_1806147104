@@ -12,5 +12,5 @@ public interface PesawatService {
     List<PesawatModel>getListPesawat();
     PesawatModel getPesawatById(Long id);
     PesawatModel updatePesawat(PesawatModel pesawat);
-    String generateNoSeri(PesawatModel pesawat);
+    
 }

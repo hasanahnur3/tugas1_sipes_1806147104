@@ -26,4 +26,35 @@ public class PenerbanganServiceImpl implements PenerbanganService {
     public void addPenerbangan(PenerbanganModel penerbangan){
         penerbanganDb.save(penerbangan);
     }
+
+    @Override
+    public PenerbanganModel getPenerbanganById(Long id) {
+        return penerbanganDb.findById(id).get();
+    }
+
+    @Override
+    public List<PenerbanganModel> getListPenerbangan() {
+        return penerbanganDb.findAll();
+    }
+
+    @Override
+    public PenerbanganModel updatePenerbangan(PenerbanganModel penerbangan) {
+        PenerbanganModel targetPenerbangan = penerbanganDb.findById(penerbangan.getId()).get();
+
+        // try{
+            targetPenerbangan.setNomor_penerbangan(penerbangan.getNomor_penerbangan());
+            targetPenerbangan.setKode_bandara_asal(penerbangan.getKode_bandara_asal());
+            targetPenerbangan.setKode_bandara_tujuan(penerbangan.getKode_bandara_tujuan());
+            targetPenerbangan.setWaktu_berangkat(penerbangan.getWaktu_berangkat());
+           
+
+            penerbanganDb.save(targetPenerbangan);
+
+            return targetPenerbangan;
+    }
+
+    @Override
+    public void deletePenerbangan(PenerbanganModel penerbangan) {
+        penerbanganDb.delete(penerbangan);
+    }
 }

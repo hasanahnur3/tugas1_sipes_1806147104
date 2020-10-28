@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TeknisiDb extends JpaRepository<TeknisiModel,BigInteger>{
+public interface TeknisiDb extends JpaRepository<TeknisiModel,Long>{
     Optional<TeknisiModel> findById(Long id);
     
 }

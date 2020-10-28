@@ -29,7 +29,7 @@ public class PesawatModel implements Serializable{
 
     @NotNull
     @Size(max=255)
-    @Column(name="nomor_seri", nullable = false)
+    @Column(name="nomor_seri", nullable = false, unique = true)
     private String nomor_seri;
 
     @NotNull
@@ -53,17 +53,25 @@ public class PesawatModel implements Serializable{
     @JsonIgnore
     private TipeModel tipe;
 
-public TipeModel getTipe() {
-	return this.tipe;
-}
-public void setTipe(TipeModel tipe) {
-	this.tipe = tipe;
-}
+    public TipeModel getTipe() {
+        return this.tipe;
+    }
+    public void setTipe(TipeModel tipe) {
+        this.tipe = tipe;
+    }
 
 
 
     @OneToMany(mappedBy = "pesawat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PenerbanganModel> listPenerbangan;
+
+    public List<PenerbanganModel> getListPenerbangan() {
+        return this.listPenerbangan;
+    }
+    public void setListPenerbangan(List<PenerbanganModel> listPenerbangan) {
+        this.listPenerbangan = listPenerbangan;
+    }
+
 
 
     @ManyToMany(cascade = {

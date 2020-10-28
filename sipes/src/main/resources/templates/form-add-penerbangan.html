@@ -1,0 +1,40 @@
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title> Add Penerbangan </title>
+
+    <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
+</head>
+
+<body>
+    <object th:include="fragments/fragment :: navbar"></object>
+    <br>
+
+    <div class="card m-5 p-3">
+        <form th:action="@{/penerbangan/add}" th:object="${penerbangan}" method="POST">
+            Nomor Penerbangan : <br>
+            <input class="form-control" type="text" th:field="*{nomor_penerbangan}"/>
+            <br><br>
+
+            Kode Bandara Asal : <br>
+            <input class="form-control" type="text" th:field="*{kode_bandara_asal}"/>
+            <br><br>
+
+            Kode Bandara Tujuan : <br>
+            <input class="form-control" type="text" th:field="*{kode_bandara_tujuan}"/>
+            <br><br>
+
+            Waktu Berangkat : <br>
+            <input type="datetime-local" th:field="*{waktu_berangkat}" class="form-control"/>
+            <br><br>
+            
+            <br><br>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+
+    </div>
+
+    
+</body>
+</html>

@@ -14,6 +14,7 @@
     <div class="card m-5 p-3">
         <form th:action="@{/pesawat/edit}" th:object="${pesawat}" method="POST">
             <input class="form-control" type="hidden" th:field="*{id}"/>
+            <input class="form-control" type="hidden" th:field="*{tipe.id}"/>
             
             Maskapai : <br>
             <input class="form-control" type="text" th:field="*{maskapai}"/>

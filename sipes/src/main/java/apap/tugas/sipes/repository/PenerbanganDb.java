@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PenerbanganDb extends JpaRepository<PenerbanganModel,BigInteger>{
+public interface PenerbanganDb extends JpaRepository<PenerbanganModel,Long>{
     Optional<PenerbanganModel> findById(Long id);
     
 }

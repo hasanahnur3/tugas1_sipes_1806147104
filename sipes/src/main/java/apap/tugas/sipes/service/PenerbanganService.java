@@ -9,4 +9,8 @@ import apap.tugas.sipes.model.TipeModel;
 
 public interface PenerbanganService {
     void addPenerbangan(PenerbanganModel penerbangan);
+    PenerbanganModel getPenerbanganById(Long id);
+    List<PenerbanganModel> getListPenerbangan();
+    PenerbanganModel updatePenerbangan(PenerbanganModel penerbangan);
+    void deletePenerbangan(PenerbanganModel penerbangan);
 }

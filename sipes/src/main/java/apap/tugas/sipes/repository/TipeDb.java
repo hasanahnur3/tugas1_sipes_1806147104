@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TipeDb extends JpaRepository<TipeModel,BigInteger>{
+public interface TipeDb extends JpaRepository<TipeModel,Long>{
     Optional<TipeModel> findById(Long id);
 
 }
