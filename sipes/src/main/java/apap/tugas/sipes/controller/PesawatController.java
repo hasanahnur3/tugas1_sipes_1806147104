@@ -277,11 +277,10 @@ public class PesawatController{
 
         /////////////////////////////////
         List<PenerbanganModel> allPenerbangan = penerbanganService.getListPenerbangan();
-        List<TeknisiModel> listTeknisi = pesawat.getListTeknisi();
 
         model.addAttribute("allPenerbangan", allPenerbangan);
-        model.addAttribute("pesawat", pesawat);
-        model.addAttribute("listTeknisi", listTeknisi);
+        model.addAttribute("pesawat", targetPesawat);
+        model.addAttribute("listTeknisi", targetPesawat.getListTeknisi());
         model.addAttribute("msg", "Penerbangan Sukses Ditambahkan");
         model.addAttribute("listPenerbangan", targetPesawat.getListPenerbangan());
         String namatipe = targetPesawat.getTipe().getNama();
@@ -448,27 +447,17 @@ public class PesawatController{
         @PathVariable(value="id") Long id,
         Model model
     ){
-        try{
             PesawatModel pesawat = pesawatService.getPesawatById(id);
             List<PenerbanganModel> listPenerbangan = pesawat.getListPenerbangan();
             for(PenerbanganModel a : listPenerbangan){
                 a.setPesawat(null);
                 penerbanganService.updatePenerbangan(a);
+                pesawat.getListPenerbangan().remove(a);
+                pesawatService.updatePesawat(pesawat);
             }
-
-
-
             pesawatService.deletePesawat(pesawat);
             model.addAttribute("pesawat", pesawat);
             return daftar_pesawat(model);
-
-
-
-
-        }catch(Exception e){
-            model.addAttribute("id", id);
-            return "error";
-        }
     }
 
 
