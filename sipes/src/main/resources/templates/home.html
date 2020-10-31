@@ -8,19 +8,31 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
-  
+    <link rel="stylesheet" href="https://unpkg.com/@coreui/icons@2.0.0-beta.3/css/free.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@coreui/icons@2.0.0-beta.3/css/brand.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@coreui/icons@2.0.0-beta.3/css/flag.min.css">
 
     <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
 </head>
 
 <body>
-    <object th:include="fragments/fragment :: navbar"></object>
+    <!-- <object th:include="fragments/fragment :: navbar"></object> -->
     
-
-    <h2>Selamat Datang di Sipesawat!</h2>
-    <a class="btn btn-primary" th:href="@{/pesawat/daftar_pesawat}">Daftar Pesawat</a>
-    <button class="btn btn-primary">Penerbangan</button>
-    <button class="btn btn-primary">Cari</button>
-    <button class="btn btn-primary">Filter</button>
+    <div class="card m-5 p-3 bg-light text-dark">
+        <br>
+        <div class="card-block text-center mb-5">
+            <br>
+            <i class="cil-airplane-mode"></i>
+            <h1><u>Selamat Datang di Sipesawat!</u></h1>
+            <br>
+            <h4 class="text-primary">Daftar Fitur</h4>
+            <br>
+            <a class="btn btn-primary btn-lg" th:href="@{/pesawat}">Daftar Pesawat</a>
+            <a class="btn btn-primary btn-lg" th:href="@{/penerbangan}">Penerbangan</a>
+            <a class="btn btn-primary btn-lg" th:href="@{/pesawat/cari-pesawat-tua}">Cari</a>
+            <a class="btn btn-primary btn-lg" th:href="@{/pesawat/filter}">Filter</a>
+            <br>
+        </div>
+    </div>
 </body>
 </html>

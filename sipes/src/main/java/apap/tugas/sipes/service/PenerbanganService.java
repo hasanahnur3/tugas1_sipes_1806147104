@@ -13,4 +13,5 @@ public interface PenerbanganService {
     List<PenerbanganModel> getListPenerbangan();
     PenerbanganModel updatePenerbangan(PenerbanganModel penerbangan);
     void deletePenerbangan(PenerbanganModel penerbangan);
+    List<String> getAllNoPenerbangan();
 }

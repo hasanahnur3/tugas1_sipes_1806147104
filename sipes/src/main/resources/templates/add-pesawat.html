@@ -1,12 +1,23 @@
-<h2>Yaaayyy!!</h2>
-<table>
-    <tr>
-        <td th:text="${pesawat.id}"></td>
-        <td th:text="${pesawat.jenis_pesawat}"></td>
-        <td th:text="${pesawat.maskapai}"></td>
-        <td th:text="${pesawat.nomor_seri}"></td>
-        <td th:text="${pesawat.tanggal_dibuat}"></td>
-        <td th:text="${pesawat.tempat_dibuat}"></td>
-        <!-- <td th:text="${pesawat.id_tipe}"></td> -->
-    </tr>
-</table>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title> Sipes </title>
+
+    <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
+</head>
+
+<body>
+    <object th:include="fragments/fragment :: navbar"></object>
+
+
+    <div class="card m-5 p-3 bg-light text-dark">
+        <br>
+        <div class="card-block text-center mb-5">
+            <h2 th:text="'Pesawat ' + ${pesawat.maskapai} + ' dengan nomor seri ' + ${pesawat.nomor_seri} + ' berhasil ditambahkan'"></h2>
+            <a class="bg.primary text-center" th:href="@{/pesawat}">Kembali</a>
+        </div>
+    </div>
+   
+</body>
+</html>

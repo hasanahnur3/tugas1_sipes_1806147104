@@ -64,5 +64,20 @@ public class PesawatServiceImpl implements PesawatService {
         //     return null;
         // }
     }
+
+    @Override
+    public void deletePesawat(PesawatModel pesawat) {
+        pesawatDb.delete(pesawat);
+    }
+
+    @Override
+    public List<String> getAllNoSeri() {
+        List<PesawatModel> listPesawat = pesawatDb.findAll();
+        List<String> listSeri = new ArrayList<String>();
+        for(PesawatModel p : listPesawat){
+            listSeri.add(p.getNomor_seri());
+        }
+        return listSeri;
+    }
     
 }

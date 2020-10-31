@@ -55,14 +55,14 @@ public class PesawatController{
         return "home";
     }
 
-    @GetMapping("/pesawat/daftar_pesawat")
+    @GetMapping("/pesawat")
     private String daftar_pesawat(Model model){
         List<PesawatModel> listPesawat = pesawatService.getListPesawat();
         model.addAttribute("listPesawat", listPesawat);
         return "daftar-pesawat";
     }
 
-    @GetMapping("/pesawat/add")
+    @GetMapping("/pesawat/tambah")
     public String addPesawatFormPage(Model model){
         PesawatModel pesawat = new PesawatModel();
         model.addAttribute("pesawat", pesawat);
@@ -118,7 +118,7 @@ public class PesawatController{
         return ns;
     }
 
-    @PostMapping("/pesawat/add")
+    @PostMapping("/pesawat/tambah")
     public String addPesawatSubmit(
         @ModelAttribute PesawatModel pesawat,
         Model model
@@ -128,13 +128,23 @@ public class PesawatController{
         }
 
         String ns = generateNoSeri(pesawat);
+        List<String> listSeri = pesawatService.getAllNoSeri();
+
+        while(listSeri.contains(ns)){
+            ns = generateNoSeri(pesawat);
+        }
 
         pesawat.setTipe(tipeService.getTipeById(pesawat.getTipe().getId()));
         pesawat.setNomor_seri(ns);
         
+        List<TeknisiModel> dummy = new ArrayList<TeknisiModel>();
         for(TeknisiModel tm: pesawat.getListTeknisi()){
-            tm = teknisiService.getTeknisiById(tm.getId());
+            if(tm.getId() != 0){
+                tm = teknisiService.getTeknisiById(tm.getId());
+                dummy.add(tm);
+            } 
         }
+        pesawat.setListTeknisi(dummy);
 
         pesawatService.addPesawat(pesawat);
         model.addAttribute("pesawat", pesawat);
@@ -143,7 +153,7 @@ public class PesawatController{
         return "add-pesawat";
     }
 
-    @PostMapping(value="/pesawat/add", params={"addteknisi"})
+    @PostMapping(value="/pesawat/tambah", params={"addteknisi"})
     public String addPesawatAddTeknisi(
         @ModelAttribute PesawatModel pesawat,
         Model model
@@ -159,7 +169,7 @@ public class PesawatController{
         return "form-add-pesawat";
     }
 
-    @GetMapping("/pesawat/view/{id}")
+    @GetMapping("/pesawat/{id}")
     public String viewPesawat(
         @PathVariable Long id,
         Model model
@@ -185,7 +195,7 @@ public class PesawatController{
         }
     }
 
-    @GetMapping("/pesawat/edit/{id}")
+    @GetMapping("/pesawat/ubah/{id}")
     public String editPesawatFormPage(
         @PathVariable Long id,
         Model model
@@ -201,7 +211,7 @@ public class PesawatController{
         }
     }
 
-    @PostMapping("/pesawat/edit")
+    @PostMapping("/pesawat/ubah")
     public String editPesawatSubmit(
         @ModelAttribute PesawatModel pesawat,
         Model model
@@ -215,17 +225,23 @@ public class PesawatController{
         return "update-pesawat";
     }
 
-    @GetMapping("/pesawat/{id}/tambah_penerbangan")
+    @GetMapping("/pesawat/{id}/tambah-penerbangan")
     public String tambahPenerbangan(
         @PathVariable Long id,
         Model model
     ){
+
         PesawatModel pesawat = pesawatService.getPesawatById(id);
         List<TeknisiModel> listTeknisi = pesawat.getListTeknisi();
         String namatipe = pesawat.getTipe().getNama();
 
         List<PenerbanganModel> allPenerbangan = penerbanganService.getListPenerbangan();
         
+        try{
+            model.addAttribute("listPenerbangan", pesawat.getListPenerbangan());
+        }catch(Exception e){
+
+        }
 
         List<PenerbanganModel> listPenerbangan = new ArrayList<PenerbanganModel>();
         listPenerbangan.add(new PenerbanganModel());
@@ -235,11 +251,12 @@ public class PesawatController{
         model.addAttribute("pesawat", pesawat);
         model.addAttribute("listTeknisi", listTeknisi);
         model.addAttribute("namatipe", namatipe);
+        model.addAttribute("msg", " ");
 
         return "tambah-penerbangan";
     }
 
-    @PostMapping("/pesawat/{id}/tambah_penerbangan")
+    @PostMapping("/pesawat/{id}/tambah-penerbangan")
     public String tambahPenerbanganSubmit(
         @PathVariable Long id, @ModelAttribute PesawatModel pesawat,
         Model model
@@ -250,16 +267,50 @@ public class PesawatController{
         if (targetPesawat.getListPenerbangan() == null || targetPesawat.getListPenerbangan().size() == 0) {
             targetPesawat.setListPenerbangan(new ArrayList<PenerbanganModel>());
         }
-        targetPesawat.getListPenerbangan().add(penerbangan);
-        pesawatService.updatePesawat(targetPesawat);
-        penerbangan.setPesawat(targetPesawat);
-        penerbanganService.updatePenerbangan(penerbangan);
-        model.addAttribute("pesawat", targetPesawat);
-        return "tambah-penerbangan-success";
+        if(!targetPesawat.getListPenerbangan().contains(penerbangan)){
+            targetPesawat.getListPenerbangan().add(penerbangan);
+            pesawatService.updatePesawat(targetPesawat);
+            penerbangan.setPesawat(targetPesawat);
+            penerbanganService.updatePenerbangan(penerbangan);
+            model.addAttribute("pesawat", targetPesawat);
+        }
+
+        /////////////////////////////////
+        List<PenerbanganModel> allPenerbangan = penerbanganService.getListPenerbangan();
+        List<TeknisiModel> listTeknisi = pesawat.getListTeknisi();
+
+        model.addAttribute("allPenerbangan", allPenerbangan);
+        model.addAttribute("pesawat", pesawat);
+        model.addAttribute("listTeknisi", listTeknisi);
+        model.addAttribute("msg", "Penerbangan Sukses Ditambahkan");
+        model.addAttribute("listPenerbangan", targetPesawat.getListPenerbangan());
+        String namatipe = targetPesawat.getTipe().getNama();
+        model.addAttribute("namatipe", namatipe);
+
+        return "tambah-penerbangan";
+
+        // return tambahPenerbangan(targetPesawat.getId(), model);
+
+        // List<TeknisiModel> listTeknisi = targetPesawat.getListTeknisi();
+        // String namatipe = targetPesawat.getTipe().getNama();
+
+        // List<PenerbanganModel> allPenerbangan = penerbanganService.getListPenerbangan();
+        
+        // List<PenerbanganModel> listPenerbangan = targetPesawat.getListPenerbangan()
+        // listPenerbangan.add(new PenerbanganModel());
+        // pesawat.setListPenerbangan(listPenerbangan);
+
+        // model.addAttribute("allPenerbangan", allPenerbangan);
+        // model.addAttribute("listTeknisi", listTeknisi);
+        // model.addAttribute("namatipe", namatipe);
+
+        // return "tambah-penerbangan";
 
     }
 
-    @GetMapping("/pesawat/daftar_pesawat_tua")
+    
+
+    @GetMapping("/pesawat/cari-pesawat-tua")
     private String daftar_pesawat_tua(Model model){
         List<PesawatModel> listPesawat = pesawatService.getListPesawat();
         List<PesawatModel> addPesawat = new ArrayList<PesawatModel>();
@@ -295,7 +346,17 @@ public class PesawatController{
     }
 
     @GetMapping("/pesawat/filter")
-    public String pesawatFilter(Model model){
+    public String pesawatFilterSubmit(
+        // @ModelAttribute Long idPenerbangan,
+        // @ModelAttribute Long idTipe,
+        // @ModelAttribute Long idTeknisi,
+        @RequestParam(name="idPenerbangan") Optional<Long> lidPenerbangan,
+        @RequestParam(name="idTipe") Optional<Long> lidTipe,
+        @RequestParam(name="idTeknisi") Optional<Long> lidTeknisi,
+        Model model
+    ){
+        System.out.println("AAAA");
+
         List<PenerbanganModel> allPenerbangan = penerbanganService.getListPenerbangan();
         List<TipeModel> allTipe = tipeService.getListTipe();
         List<TeknisiModel> allTeknisi = teknisiService.getListTeknisi();
@@ -304,76 +365,194 @@ public class PesawatController{
         model.addAttribute("allTeknisi", allTeknisi);
         model.addAttribute("notEmpty", false);
 
-        return "pesawat-filter";
-    }
-
-    @GetMapping("/pesawat/filter")
-    public String pesawatFilterSubmit(
-        // @ModelAttribute Long idPenerbangan,
-        // @ModelAttribute Long idTipe,
-        // @ModelAttribute Long idTeknisi,
-        // @RequestParam(name="idPenerbangan") Long idPenerbangan,
-        // @RequestParam(name="idTipe") Long idTipe,
-        // @RequestParam(name="idTeknisi") Long idTeknisi,
-        @RequestParam Map<String, String> requestParams,
-        Model model
-    ){
-        System.out.println("AAAA");
-        Long idPenerbangan = Long.valueOf("0");
-        Long idTipe = Long.valueOf("0");
-        Long idTeknisi = Long.valueOf("0")
-        if(requestParams.get("idPenerbangan") != null) idPenerbangan = Long.parseLong(requestParams.get("idPenerbangan"));
-        if(requestParams.get("idTipe") != null)idTipe = Long.parseLong(requestParams.get("idTipe"));
-        if(requestParams.get("idTeknisi") != null)idTeknisi = Long.parseLong(requestParams.get("idTeknisi"));
-        // System.out.println(idPenerbangan);
-        // System.out.println(idTipe);
-        // System.out.println(idTeknisi);
-
-        List<PesawatModel> allPesawat = pesawatService.getListPesawat();
-        List<PesawatModel> listPesawat = new ArrayList<PesawatModel>();
-
-        for(PesawatModel p : allPesawat){
-            listPesawat.add(p);
-        }
+        Long idPenerbangan = Long.valueOf(0);
+        Long idTipe = Long.valueOf(0);
+        Long idTeknisi = Long.valueOf(0);
         
-        for(PesawatModel p : allPesawat){
-            //1
-            if(!(idPenerbangan == 0)){
-                PenerbanganModel targetPenerbangan = penerbanganService.getPenerbanganById(idPenerbangan);
-                List<PenerbanganModel> pPenerbangan = p.getListPenerbangan();
-                if (!pPenerbangan.contains(targetPenerbangan)){
-                    listPesawat.remove(p);
-                    continue;
-                } 
+        try{
+            idPenerbangan = lidPenerbangan.get();
+        }catch(Exception e){
+
+        }
+
+        try{
+            idTipe = lidTipe.get();
+        }catch(Exception e){
+
+        }
+
+        try{
+            idTeknisi = lidTeknisi.get();
+        }catch(Exception e){
+
+        }
+
+        System.out.println(idPenerbangan);
+        System.out.println(idTipe);
+        System.out.println(idTeknisi);
+
+        if((idPenerbangan!=0) || (idTipe!=0) || (idTeknisi!=0)){
+            List<PesawatModel> allPesawat = pesawatService.getListPesawat();
+            List<PesawatModel> listPesawat = new ArrayList<PesawatModel>();
+    
+            for(PesawatModel p : allPesawat){
+                listPesawat.add(p);
             }
-
-
-            //2
-            if(!(idTipe == 0)){
-                TipeModel targetTipe = tipeService.getTipeById(idTipe);
-                TipeModel pTipe = p.getTipe();
-                if(pTipe.getId() != targetTipe.getId()){
-                    listPesawat.remove(p);
-                    continue;
-                } 
-            }
-
-
-            //3
-            if(!(idTeknisi==0)){
-                TeknisiModel targetTeknisi = teknisiService.getTeknisiById(idTeknisi);
-                List<TeknisiModel> pTeknisi = p.getListTeknisi();
-                if(!pTeknisi.contains(targetTeknisi)){
-                    listPesawat.remove(p);
-                    continue;
+            
+            for(PesawatModel p : allPesawat){
+                //1
+                if(!(idPenerbangan == 0)){
+                    PenerbanganModel targetPenerbangan = penerbanganService.getPenerbanganById(idPenerbangan);
+                    List<PenerbanganModel> pPenerbangan = p.getListPenerbangan();
+                    if (!pPenerbangan.contains(targetPenerbangan)){
+                        listPesawat.remove(p);
+                        continue;
+                    } 
+                }
+    
+    
+                //2
+                if(!(idTipe == 0)){
+                    TipeModel targetTipe = tipeService.getTipeById(idTipe);
+                    TipeModel pTipe = p.getTipe();
+                    if(pTipe.getId() != targetTipe.getId()){
+                        listPesawat.remove(p);
+                        continue;
+                    } 
+                }
+    
+    
+                //3
+                if(!(idTeknisi == 0)){
+                    TeknisiModel targetTeknisi = teknisiService.getTeknisiById(idTeknisi);
+                    List<TeknisiModel> pTeknisi = p.getListTeknisi();
+                    if(!pTeknisi.contains(targetTeknisi)){
+                        listPesawat.remove(p);
+                        continue;
+                    }
                 }
             }
+            Boolean notEmpty = true;
+            if(listPesawat.size()==0) notEmpty = false;
+            model.addAttribute("notEmpty", notEmpty);
+            model.addAttribute("listPesawat", listPesawat);
+
         }
-        Boolean notEmpty = true;
-        if(listPesawat.size()==0) notEmpty = false;
-        model.addAttribute("notEmpty", notEmpty);
-        model.addAttribute("listPesawat", listPesawat);
+
         return "pesawat-filter";
+
     }
+
+    @GetMapping("/pesawat/hapus/{id}")
+    public String deletePesawat(
+        @PathVariable(value="id") Long id,
+        Model model
+    ){
+        try{
+            PesawatModel pesawat = pesawatService.getPesawatById(id);
+            List<PenerbanganModel> listPenerbangan = pesawat.getListPenerbangan();
+            for(PenerbanganModel a : listPenerbangan){
+                a.setPesawat(null);
+                penerbanganService.updatePenerbangan(a);
+            }
+
+
+
+            pesawatService.deletePesawat(pesawat);
+            model.addAttribute("pesawat", pesawat);
+            return daftar_pesawat(model);
+
+
+
+
+        }catch(Exception e){
+            model.addAttribute("id", id);
+            return "error";
+        }
+    }
+
+
+
+    // @GetMapping("/pesawat/filter")
+    // public String pesawatFilter(Model model){
+    //     List<PenerbanganModel> allPenerbangan = penerbanganService.getListPenerbangan();
+    //     List<TipeModel> allTipe = tipeService.getListTipe();
+    //     List<TeknisiModel> allTeknisi = teknisiService.getListTeknisi();
+    //     model.addAttribute("allPenerbangan", allPenerbangan);
+    //     model.addAttribute("allTipe", allTipe);
+    //     model.addAttribute("allTeknisi", allTeknisi);
+    //     model.addAttribute("notEmpty", false);
+
+    //     return "pesawat-filter";
+    // }
+
+    // @GetMapping("/pesawat/filter")
+    // public String pesawatFilterSubmit(
+    //     // @ModelAttribute Long idPenerbangan,
+    //     // @ModelAttribute Long idTipe,
+    //     // @ModelAttribute Long idTeknisi,
+    //     // @RequestParam(name="idPenerbangan") Long idPenerbangan,
+    //     // @RequestParam(name="idTipe") Long idTipe,
+    //     // @RequestParam(name="idTeknisi") Long idTeknisi,
+    //     // @RequestParam Map<String, String> requestParams,
+    //     Model model
+    // ){
+    //     System.out.println("AAAA");
+    //     Long idPenerbangan = Long.valueOf("0");
+    //     Long idTipe = Long.valueOf("0");
+    //     Long idTeknisi = Long.valueOf("0")
+    //     if(requestParams.get("idPenerbangan") != null) idPenerbangan = Long.parseLong(requestParams.get("idPenerbangan"));
+    //     if(requestParams.get("idTipe") != null)idTipe = Long.parseLong(requestParams.get("idTipe"));
+    //     if(requestParams.get("idTeknisi") != null)idTeknisi = Long.parseLong(requestParams.get("idTeknisi"));
+    //     // System.out.println(idPenerbangan);
+    //     // System.out.println(idTipe);
+    //     // System.out.println(idTeknisi);
+
+    //     List<PesawatModel> allPesawat = pesawatService.getListPesawat();
+    //     List<PesawatModel> listPesawat = new ArrayList<PesawatModel>();
+
+    //     for(PesawatModel p : allPesawat){
+    //         listPesawat.add(p);
+    //     }
+        
+    //     for(PesawatModel p : allPesawat){
+    //         //1
+    //         if(!(idPenerbangan == 0)){
+    //             PenerbanganModel targetPenerbangan = penerbanganService.getPenerbanganById(idPenerbangan);
+    //             List<PenerbanganModel> pPenerbangan = p.getListPenerbangan();
+    //             if (!pPenerbangan.contains(targetPenerbangan)){
+    //                 listPesawat.remove(p);
+    //                 continue;
+    //             } 
+    //         }
+
+
+    //         //2
+    //         if(!(idTipe == 0)){
+    //             TipeModel targetTipe = tipeService.getTipeById(idTipe);
+    //             TipeModel pTipe = p.getTipe();
+    //             if(pTipe.getId() != targetTipe.getId()){
+    //                 listPesawat.remove(p);
+    //                 continue;
+    //             } 
+    //         }
+
+
+    //         //3
+    //         if(!(idTeknisi==0)){
+    //             TeknisiModel targetTeknisi = teknisiService.getTeknisiById(idTeknisi);
+    //             List<TeknisiModel> pTeknisi = p.getListTeknisi();
+    //             if(!pTeknisi.contains(targetTeknisi)){
+    //                 listPesawat.remove(p);
+    //                 continue;
+    //             }
+    //         }
+    //     }
+    //     Boolean notEmpty = true;
+    //     if(listPesawat.size()==0) notEmpty = false;
+    //     model.addAttribute("notEmpty", notEmpty);
+    //     model.addAttribute("listPesawat", listPesawat);
+    //     return "pesawat-filter";
+    // }
 
 }

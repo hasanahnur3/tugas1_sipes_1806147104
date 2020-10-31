@@ -2,52 +2,63 @@
 
 <head>
     <meta charset="UTF-8">
-    <title> Daftar Pesawat </title>
+    <title> Sipes </title>
 
     <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
 </head>
 
 <body>
     <object th:include="fragments/fragment :: navbar"></object>
-    <br>
-
-    <a class="btn btn-primary" th:href="@{/pesawat/add}">Add Pesawat</a>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nomor Penerbangan</th>
-                <th>Bandara Asal</th>
-                <th>Bandara Tujuan</th>
-                <th>Waktu Berangkat</th>
-                <th></th>
-                <th>Aksi</th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr th:each="penerbangan, iterationStatus: ${listPenerbangan}">
-                <!-- <td th:text="${iterationStatus.count}"></td> -->
-                <td th:text="${penerbangan.id}"></td>
-                <td th:text="${penerbangan.nomor_penerbangan}"></td>
-                <td th:text="${penerbangan.kode_bandara_asal}"></td>
-                <td th:text="${penerbangan.kode_bandara_tujuan}"></td>
-                <td th:text="${penerbangan.waktu_berangkat}"></td>
-                
-                <!-- <td th:text="${pesawat.tanggal_dibuat}"></td>
-                <td th:text="${pesawat.tempat_dibuat}"></td>
-                <td th:text="${pesawat.id_tipe}"></td> -->
+    <div class="card m-5 p-3 bg-light text-dark">
+        <br>
+        <div class="card-block text-center mb-5">
+            <h2>Add Penerbangan</h2>
+            <br>
+            <a class="btn btn-primary" th:href="@{/penerbangan/tambah}">Add Penerbangan</a>
+            <br>
+            <br>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nomor Penerbangan</th>
+                        <th>Bandara Asal</th>
+                        <th>Bandara Tujuan</th>
+                        <th>Waktu Berangkat</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
         
-                <td><a class="btn btn-primary" >Lihat</a></td>
-                <td><a class="btn btn-primary" >Ubah</a></td>
-                <td><a class="btn btn-primary" >Hapus</a></td>
+                <tbody>
+                    <tr th:each="penerbangan, iterationStatus: ${listPenerbangan}">
+                        <td th:text="${iterationStatus.count}"></td>
+                        <!-- <td th:text="${penerbangan.id}"></td> -->
+                        <td th:text="${penerbangan.nomor_penerbangan}"></td>
+                        <td th:text="${penerbangan.kode_bandara_asal}"></td>
+                        <td th:text="${penerbangan.kode_bandara_tujuan}"></td>
+                        <td th:text="${#temporals.format(penerbangan.waktu_berangkat, 'dd-MM-yyyy')}"></td>
+                        
+                        <!-- <td th:text="${pesawat.tanggal_dibuat}"></td>
+                        <td th:text="${pesawat.tempat_dibuat}"></td>
+                        <td th:text="${pesawat.id_tipe}"></td> -->
+                
+                        <td><a class="btn btn-primary" th:href="@{/penerbangan/} + ${penerbangan.id}">Lihat</a></td>
+                        <td><a class="btn btn-primary" th:href="@{/penerbangan/ubah/} + ${penerbangan.id}">Ubah</a></td>
+                        <td><a class="btn btn-danger" th:href="@{/penerbangan/hapus/} + ${penerbangan.id}">Hapus</a></td>
+        
+                    </tr>
+        
+                </tbody>
+        
+            </table>
+            
+        </div>
 
-            </tr>
+    </div>
+    
 
-        </tbody>
-
-    </table>
+ 
 </body>
 </html>

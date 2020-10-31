@@ -54,15 +54,16 @@ public class PenerbanganController{
     //     return "daftar-pesawat";
     // }
 
-    @GetMapping("/penerbangan/add")
+    @GetMapping("/penerbangan/tambah")
     public String addPenerbanganFormPage(Model model){
         PenerbanganModel penerbangan = new PenerbanganModel();
         model.addAttribute("penerbangan", penerbangan);
+        model.addAttribute("msg", "");
 
         return "form-add-penerbangan";
     }
 
-    @PostMapping("/penerbangan/add")
+    @PostMapping("/penerbangan/tambah")
     public String addPenerbanganSubmit(
         @ModelAttribute PenerbanganModel penerbangan,
         Model model
@@ -70,14 +71,19 @@ public class PenerbanganController{
         if (penerbangan.getWaktu_berangkat() == null) {
             penerbangan.setWaktu_berangkat(LocalDateTime.now());
         }
-
-        penerbanganService.addPenerbangan(penerbangan);
         model.addAttribute("penerbangan", penerbangan);
 
+        if((penerbangan.getNomor_penerbangan().length()!=16) || (penerbanganService.getAllNoPenerbangan().contains(penerbangan.getNomor_penerbangan()))) {
+            model.addAttribute("msg", "nomor penerbangan harus 16 digit unik");
+            return "form-add-penerbangan";
+        }
+
+        penerbanganService.addPenerbangan(penerbangan);
+        model.addAttribute("msg", "");
         return "add-penerbangan";
     }
 
-    @GetMapping("/penerbangan/view/{id}")
+    @GetMapping("/penerbangan/{id}")
     public String viewPenerbangan(
         @PathVariable Long id,
         Model model
@@ -93,14 +99,14 @@ public class PenerbanganController{
         }
     }
 
-    @GetMapping("/penerbangan/daftar_penerbangan")
-    private String daftar_pesawat(Model model){
+    @GetMapping("/penerbangan")
+    private String daftar_penerbangan(Model model){
         List<PenerbanganModel> listPenerbangan = penerbanganService.getListPenerbangan();
         model.addAttribute("listPenerbangan", listPenerbangan);
         return "daftar-penerbangan";
     }
 
-    @GetMapping("/penerbangan/edit/{id}")
+    @GetMapping("/penerbangan/ubah/{id}")
     public String editPenerbanganFormPage(
         @PathVariable Long id,
         Model model
@@ -116,7 +122,7 @@ public class PenerbanganController{
         }
     }
 
-    @PostMapping("/penerbangan/edit")
+    @PostMapping("/penerbangan/ubah")
     public String editPenerbanganSubmit(
         @ModelAttribute PenerbanganModel penerbangan,
         Model model
@@ -126,20 +132,19 @@ public class PenerbanganController{
         return "update-penerbangan";
     }
 
-    @GetMapping("/penerbangan/delete/{id}")
-    public String deleteHotel(
+    @GetMapping("/penerbangan/hapus/{id}")
+    public String deletePenerbangan(
         @PathVariable(value="id") Long id,
         Model model
     ){
-        // try{
+        try{
             PenerbanganModel penerbangan = penerbanganService.getPenerbanganById(id);
             penerbanganService.deletePenerbangan(penerbangan);
             model.addAttribute("penerbangan", penerbangan);
-            return "delete-penerbangan";
-
-        // }catch(Exception e){
-        //     model.addAttribute("id", id);
-        //     return "sad";
-        // }
+            return daftar_penerbangan(model);
+        }catch(Exception e){
+            model.addAttribute("id", id);
+            return "error";
+        }
     }
 }

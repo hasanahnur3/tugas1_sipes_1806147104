@@ -2,67 +2,78 @@
 
 <head>
     <meta charset="UTF-8">
-    <title> Daftar Pesawat </title>
+    <title> Sipes </title>
 
     <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
 </head>
 
 <body>
     <object th:include="fragments/fragment :: navbar"></object>
-    <br>
 
-    <div class="card m-5 p-3">
-        <form th:action="@{/pesawat/add}" th:object="${pesawat}" method="POST">
-            Maskapai : <br>
-            <input class="form-control" type="text" th:field="*{maskapai}"/>
-            <br><br>
+    <div class="row justify-content-center " >
+
+        <div class="card m-5 p-3 bg-light text-dark" style="width: 30rem;">
+            <br>
+            <h2 class="text-center">Add Pesawat</h2>
+            <br>
     
-            Tanggal Dibuat : <br>
-            <input type="date" th:field="*{tanggal_dibuat}" class="form-control"/>
-            <br><br>
-    
-            Tempat Dibuat : <br>
-            <input class="form-control" type="text" th:field="*{tempat_dibuat}"/>
-            <br><br>
-    
-            Jenis Pesawat : <br>
-            <select th:field="*{jenis_pesawat}" class="form-control">
-                <option value="Komersial">Komersial</option>
-                <option value="Militer">Militer</option>
-            </select>
-            <br><br>
-    
-            Tipe : <br>
-            <select th:field="*{tipe.id}" class="form-control">
-                <option value="0"> -- </option>
-                <option th:each="tipe : ${listTipe}"
-                                th:value="${tipe.id}"
-                                th:utext="${tipe.nama}"></option>
-            </select>
-            <br><br>
-    
-            Teknisi : <br>
-            <table>
-                <tr th:each="listTeknisi, iterationStatus : *{listTeknisi}">
-                    <td>
-                        <select th:field="*{listTeknisi[__${iterationStatus.index}__].id}" class="form-control">
-                            <option value="0"> -- </option>
-                            <option th:each="t : ${allTeknisi}"
-                                            th:value="${t.id}"
-                                            th:utext="${t.nama}"></option>
-                        </select>
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-            </table>
-            <button type="submit" class="btn btn-danger" name="addteknisi">Add Teknisi</button>
             
-            <br><br>
-            <button class="btn btn-primary" type="submit">Submit</button>
-        </form>
+            <form th:action="@{/pesawat/tambah}" th:object="${pesawat}" method="POST">
+                Maskapai : <br>
+                <input class="form-control" type="text" th:field="*{maskapai}" required/>
+                <br><br>
+        
+                Tanggal Dibuat : <br>
+                <input type="date" th:field="*{tanggal_dibuat}" class="form-control"/>
+                <br><br>
+        
+                Tempat Dibuat : <br>
+                <input class="form-control" type="text" th:field="*{tempat_dibuat}" required/>
+                <br><br>
+        
+                Jenis Pesawat : <br>
+                <select th:field="*{jenis_pesawat}" class="form-control">
+                    <option value="Komersial">Komersial</option>
+                    <option value="Militer">Militer</option>
+                </select>
+                <br><br>
+        
+                Tipe : <br>
+                <select th:field="*{tipe.id}" class="form-control">
+                    <option th:each="tipe : ${listTipe}"
+                                    th:value="${tipe.id}"
+                                    th:utext="${tipe.nama}"></option>
+                </select>
+                <br><br>
+        
+                Teknisi : <br>
+                <table>
+                    <tr th:each="listTeknisi, iterationStatus : *{listTeknisi}">
+                        <td>
+                            <select th:field="*{listTeknisi[__${iterationStatus.index}__].id}" class="form-control">
+                                <option th:each="t : ${allTeknisi}"
+                                                th:value="${t.id}"
+                                                th:utext="${t.nama}"></option>
+                            </select>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <button type="submit" class="btn btn-danger" name="addteknisi">Add Teknisi</button>
+                
+                <br><br>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+    
+        </div>
+    
 
     </div>
+
+   
+
 
     
 </body>

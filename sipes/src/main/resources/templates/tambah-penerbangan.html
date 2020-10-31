@@ -9,74 +9,162 @@
 
 <body>
     <object th:include="fragments/fragment :: navbar"></object>
-    <br>
+    <div class="row justify-content-center " >
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>No Seri</th>
-                <th>Jenis Pesawat</th>
-                <th>Nama Tipe</th>
-                <th>Maskapai</th>
-                <th>Tempat Dibuat</th>
-                <th>Tanggal Dibuat</th>
-            </tr>
-        </thead>
+        <div class="card m-5 p-3 bg-light text-dark" style="width: 30rem;">
+            <br>
+            <h2 class="text-center">Detail Pesawat</h2>
+            <br>
 
-        <tbody>
-            <tr>
-                <td th:text="${pesawat.id}"></td>
-                <td th:text="${pesawat.nomor_seri}"></td>
-                <td th:text="${pesawat.jenis_pesawat}"></td>
-                <td th:text="${namatipe}"></td>
-                <td th:text="${pesawat.maskapai}"></td>
-                <td th:text="${pesawat.tempat_dibuat}"></td>
-                <td th:text="${pesawat.tanggal_dibuat}"></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <table class="table">
-            <thead>
+            <table class="table">
                 <tr>
-                    <th>Id</th>
-                    <th>Nama</th>
-                    <th>No Telp</th>
+                  <th>No Seri</th>
+                  <td th:text="${pesawat.nomor_seri}"></td>
                 </tr>
-            </thead>
-
-            <tbody>
-                <tr th:each="teknisi, iterationStatus: ${listTeknisi}">
-                    <td th:text="${teknisi.id}"></td>
-                    <td th:text="${teknisi.nama}"></td>
-                    <td th:text="${teknisi.nomor_telepon}"></td>
+                <tr>
+                  <th>Jenis Pesawat</th>
+                  <td th:text="${pesawat.jenis_pesawat}"></td>
                 </tr>
-            </tbody>        
-    </table>
-
-
-
-    <div class="card m-5 p-3">
-        <form th:action="@{/pesawat/}+${pesawat.id}+@{/tambah_penerbangan}" th:object="${pesawat}" method="GET">
-            Tambah Penerbangan : <br>
-            <table>
-                <tr th:each="penerbangan, iterationStatus : *{listPenerbangan}">
-                    <td>
-                        <select th:field="*{listPenerbangan[__${iterationStatus.index}__].id}" class="form-control">
-                            <option value="0"> -- </option>
-                            <option th:each="p : ${allPenerbangan}"
-                                            th:value="${p.id}"
-                                            th:utext="${p.nomor_penerbangan}"></option>
-                        </select>
-                    </td>
-                    <td>
-                    </td>
+                <tr>
+                  <th>Nama Tipe</th>
+                  <td th:text="${namatipe}"></td>
                 </tr>
+                <tr>
+                    <th>Maskapai</th>
+                    <td th:text="${pesawat.maskapai}"></td>
+                </tr>
+                <tr>
+                    <th>Tempat Dibuat</th>
+                    <td th:text="${pesawat.tempat_dibuat}"></td>
+                  </tr>
+                  <tr>
+                    <th>Tanggal Dibuat</th>
+                    <td th:text="${pesawat.tanggal_dibuat}"></td>
+                  </tr>
+              </table>
+            </div>
+        </div>
+
+
+        <div class="row justify-content-center">
+
+            <div class="card col-md-5 m-3 p-3 bg-light text-dark">
+                <br>
+                <h4 class="text-center">List Teknisi</h4>
+                <br>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nama</th>
+                            <th>No Telp</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        <tr th:each="teknisi, iterationStatus: ${listTeknisi}">
+                            <td th:text="${teknisi.id}"></td>
+                            <td th:text="${teknisi.nama}"></td>
+                            <td th:text="${teknisi.nomor_telepon}"></td>
+                        </tr>
+                    </tbody>        
             </table>
+    
+            </div>
+    
+    
+            <div class="card col-md-5 m-3 p-3 bg-light text-dark">
+                <br>
+                <h4 class="text-center">List Penerbangan</h4>
+                <br>
+                <form th:action="@{/pesawat/}+${pesawat.id}+@{/tambah-penerbangan}" th:object="${pesawat}" method="POST">
+                    <h5 class="ml-3">
+                        Tambah Penerbangan :
+                    </h5>
+                    <div class="row ml-3">
+                        <table>
+                            <tr th:each="penerbangan, iterationStatus : *{listPenerbangan}">
+                                <td>
+                                    <select th:field="*{listPenerbangan[__${iterationStatus.index}__].id}" class="form-control">
+                                        <!-- <option value="0"> -- </option> -->
+                                        <option th:each="p : ${allPenerbangan}"
+                                                        th:value="${p.id}"
+                                                        th:utext="${p.nomor_penerbangan}"></option>
+                                    </select>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <button class="btn btn-primary" type="submit">Submit</button>
+
+                    </div>
+                   
+                    <br>
+                </form>
+
+
+
+
+
+
+
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nomor Penerbangan</th>
+                            <th>Bandara Asal</th>
+                            <th>Bandara Tujuan</th>
+                            <th>Waktu Berangkat</th>
+                        </tr>
+                    </thead>
             
-            <br><br>
-            <button class="btn btn-primary" type="submit">Submit</button>
-        </form>
+                    <tbody>
+                        <tr th:each="penerbangan, iterationStatus: ${listPenerbangan}">
+                            <!-- <td th:text="${iterationStatus.count}"></td> -->
+                            <td th:text="${penerbangan.id}"></td>
+                            <td th:text="${penerbangan.nomor_penerbangan}"></td>
+                            <td th:text="${penerbangan.kode_bandara_asal}"></td>
+                            <td th:text="${penerbangan.kode_bandara_tujuan}"></td>
+                            <td th:text="${penerbangan.waktu_berangkat}"></td>
+                            
+                            <!-- <td th:text="${pesawat.tanggal_dibuat}"></td>
+                            <td th:text="${pesawat.tempat_dibuat}"></td>
+                            <td th:text="${pesawat.id_tipe}"></td> -->
+            
+                        </tr>
+            
+                    </tbody>
+            
+                </table>
+
+                <h5 th:text="${msg}" class="text-danger"></h5>
+    
+            </div>
+
+
+
+
+
+        </div>
+        
+
+
+
+
+
+
+
+    
+
+
+    
+
+
+
+
 </body>
 </html>

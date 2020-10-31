@@ -11,69 +11,110 @@
     <object th:include="fragments/fragment :: navbar"></object>
     <br>
 
-    <form th:action="@{/pesawat/filter}" method="POST">
-        Penerbangan : <br>
-        <select name="idPenerbangan" class="form-control">
-            <option value="0"> -- </option>
-            <option th:each="p : ${allPenerbangan}"
-                            th:value="${p.id}"
-                            th:utext="${p.nomor_penerbangan}"></option>
-        </select>
+    <div class="row justify-content-center " >
 
-        Tipe : <br>
-        <select name="*idTipe" class="form-control">
-            <option value="0"> -- </option>
-            <option th:each="p : ${allTipe}"
-                            th:value="${p.id}"
-                            th:utext="${p.nama}"></option>
-        </select>
+        <div class="card m-5 p-3 bg-light text-dark" style="width: 30rem;">
+            <br>
+            <h2 class="text-center">Filter</h2>
+            <br>
 
-        Teknisi : <br>
-        <select name="idTeknisi" class="form-control">
-            <option value="0"> -- </option>
-            <option th:each="p : ${allTeknisi}"
-                            th:value="${p.id}"
-                            th:utext="${p.nama}"></option>
-        </select> 
-        <br><br>
-        <button class="btn btn-primary" type="submit">Submit</button>
-    </form>
+            <form th:action="@{/pesawat/filter}" method="GET">
+                Penerbangan : <br>
+                <select name="idPenerbangan" class="form-control">
+                    <option value="0"> -- </option>
+                    <option th:each="p : ${allPenerbangan}"
+                                    th:value="${p.id}"
+                                    th:utext="${p.nomor_penerbangan}"></option>
+                </select>
+        
+                Tipe : <br>
+                <select name="idTipe" class="form-control">
+                    <option value="0"> -- </option>
+                    <option th:each="p : ${allTipe}"
+                                    th:value="${p.id}"
+                                    th:utext="${p.nama}"></option>
+                </select>
+        
+                Teknisi : <br>
+                <select name="idTeknisi" class="form-control">
+                    <option value="0"> -- </option>
+                    <option th:each="p : ${allTeknisi}"
+                                    th:value="${p.id}"
+                                    th:utext="${p.nama}"></option>
+                </select> 
+                <br><br>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+  
+          
+    
+        </div>
+    
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>No Seri</th>
-                <th>Jenis Pesawat</th>
-                <th>Maskapai</th>
-                <th></th>
-                <th>Aksi</th>
-                <th></th>
-            </tr>
-        </thead>
+    </div>
 
-        <tbody>
-            <div th:if="${notEmpty}">
-                <tr th:each="pesawat, iterationStatus: ${listPesawat}">
-                    <!-- <td th:text="${iterationStatus.count}"></td> -->
-                    <td th:text="${pesawat.id}"></td>
-                    <td th:text="${pesawat.nomor_seri}"></td>
-                    <td th:text="${pesawat.jenis_pesawat}"></td>
-                    <td th:text="${pesawat.maskapai}"></td>
-                    
-                    <!-- <td th:text="${pesawat.tanggal_dibuat}"></td>
-                    <td th:text="${pesawat.tempat_dibuat}"></td>
-                    <td th:text="${pesawat.id_tipe}"></td> -->
+
+    <div class="row justify-content-center " >
+
+        <div class="card p-3 bg-light text-dark">
+            <table class="table tabled-striped">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>No Seri</th>
+                        <th>Jenis Pesawat</th>
+                        <th>Tipe</th>
+                        <th>Maskapai</th>
+                        <th>Nomor Penerbangan</th>
+                        <th>List Teknisi</th>
+                    </tr>
+                </thead>
+        
+                <tbody>
+                    <div th:if="${notEmpty}">
+                        <tr th:each="pesawat, iterationStatus: ${listPesawat}">
+                            <td th:text="${iterationStatus.count}"></td>
+                            <!-- <td th:text="${pesawat.id}"></td> -->
+                            <td th:text="${pesawat.nomor_seri}"></td>
+                            <td th:text="${pesawat.tipe.nama}"></td>
+                            <td th:text="${pesawat.jenis_pesawat}"></td>
+                            <td th:text="${pesawat.maskapai}"></td>
+                            <td>
+                                <ul>
+                                    <li th:each="p : ${pesawat.listPenerbangan}" th:text="${p.nomor_penerbangan}"></li>
+                                  </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li th:each="p : ${pesawat.listTeknisi}" th:text="${p.nama}"></li>
+                                  </ul>
+                            </td>
+                            
+                            <!-- <td th:text="${pesawat.tanggal_dibuat}"></td>
+                            <td th:text="${pesawat.tempat_dibuat}"></td>
+                            <td th:text="${pesawat.id_tipe}"></td> -->
+<!--                     
+                            <td><a class="btn btn-primary" >Lihat</a></td>
+                            <td><a class="btn btn-primary" >Ubah</a></td>
+                            <td><a class="btn btn-primary" >Hapus</a></td> -->
+                        </tr>
+        
+                    </div>
+        
+                </tbody>
+        
+            </table>
+    
             
-                    <td><a class="btn btn-primary" >Lihat</a></td>
-                    <td><a class="btn btn-primary" >Ubah</a></td>
-                    <td><a class="btn btn-primary" >Hapus</a></td>
-                </tr>
+          
+    
+        </div>
+    
 
-            </div>
+    </div>  
 
-        </tbody>
+    
 
-    </table>
+    
 </body>
 </html>

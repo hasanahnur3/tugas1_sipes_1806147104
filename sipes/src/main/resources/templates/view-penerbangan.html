@@ -1,0 +1,39 @@
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title> Daftar Pesawat </title>
+
+    <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
+</head>
+
+<body>
+    <object th:include="fragments/fragment :: navbar"></object>
+    <br>
+
+    <!-- <a class="btn btn-primary" th:href="@{/penerbangan/tambah}">Add Penerbangan</a> -->
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nomor Penerbangan</th>
+                <th>Bandara Asal</th>
+                <th>Bandara Tujuan</th>
+                <th>Waktu Berangkat</th>
+            </tr>
+        </thead>
+
+        <tbody>
+                <!-- <td th:text="${iterationStatus.count}"></td> -->
+                <td th:text="${penerbangan.id}"></td>
+                <td th:text="${penerbangan.nomor_penerbangan}"></td>
+                <td th:text="${penerbangan.kode_bandara_asal}"></td>
+                <td th:text="${penerbangan.kode_bandara_tujuan}"></td>
+                <td th:text="${penerbangan.waktu_berangkat}"></td>
+
+        </tbody>
+
+    </table>
+</body>
+</html>

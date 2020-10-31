@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -56,5 +58,15 @@ public class PenerbanganServiceImpl implements PenerbanganService {
     @Override
     public void deletePenerbangan(PenerbanganModel penerbangan) {
         penerbanganDb.delete(penerbangan);
+    }
+
+    @Override
+    public List<String> getAllNoPenerbangan() {
+        List<PenerbanganModel> listPenerbangan = penerbanganDb.findAll();
+        List<String> listNo = new ArrayList<String>();
+        for(PenerbanganModel p : listPenerbangan){
+            listNo.add(p.getNomor_penerbangan());
+        }
+        return listNo;
     }
 }

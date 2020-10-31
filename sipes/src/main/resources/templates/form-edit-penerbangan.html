@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title> Add Penerbangan </title>
+    <title> Sipes </title>
 
     <object th:include="fragments/fragment :: bootstrap" th:remove="tag"></object>
 </head>
@@ -11,29 +11,47 @@
     <object th:include="fragments/fragment :: navbar"></object>
     <br>
 
+
+    <div class="row justify-content-center " >
+
+        <div class="card m-5 p-3 bg-light text-dark" style="width: 30rem;">
+            <br>
+            <h2 class="text-center">Edit Penerbangan</h2>
+            <br>
+            <form th:action="@{/penerbangan/ubah}" th:object="${penerbangan}" method="POST">
+                <input class="form-control" type="hidden" th:field="*{id}"/>
+                
+                Nomor Penerbangan : <br>
+                <input class="form-control" type="text" th:field="*{nomor_penerbangan}"/>
+                <br><br>
+    
+                Kode Bandara Asal : <br>
+                <input class="form-control" type="text" th:field="*{kode_bandara_asal}"/>
+                <br><br>
+    
+                Kode Bandara Tujuan : <br>
+                <input class="form-control" type="text" th:field="*{kode_bandara_tujuan}"/>
+                <br><br>
+    
+                Waktu Berangkat : <br>
+                <input type="datetime-local" th:field="*{waktu_berangkat}" class="form-control"/>
+                <br><br>
+                
+                <br><br>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+
+    
+        </div>
+    
+
+    </div>
+
+
+
+
     <div class="card m-5 p-3">
-        <form th:action="@{/penerbangan/edit}" th:object="${penerbangan}" method="POST">
-            <input class="form-control" type="hidden" th:field="*{id}"/>
-            
-            Nomor Penerbangan : <br>
-            <input class="form-control" type="text" th:field="*{nomor_penerbangan}"/>
-            <br><br>
-
-            Kode Bandara Asal : <br>
-            <input class="form-control" type="text" th:field="*{kode_bandara_asal}"/>
-            <br><br>
-
-            Kode Bandara Tujuan : <br>
-            <input class="form-control" type="text" th:field="*{kode_bandara_tujuan}"/>
-            <br><br>
-
-            Waktu Berangkat : <br>
-            <input type="datetime-local" th:field="*{waktu_berangkat}" class="form-control"/>
-            <br><br>
-            
-            <br><br>
-            <button class="btn btn-primary" type="submit">Submit</button>
-        </form>
+        
 
     </div>
 
